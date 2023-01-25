@@ -1,0 +1,26 @@
+<div class='relatedArticles'>
+
+  {% assign skip_articles = article.handle | split: '.....' %}
+  {% for tag in article.tags %}
+
+  {% assign counter = 0 %}
+  {% for related_article in blog.articles %}
+    {% if related_article.tags contains tag and counter < 6 %}
+      {% unless skip_articles contains related_article.handle %}
+        {% assign counter = counter | plus: 1 %}
+        {% assign temp = related_article.handle | split: '.....' %}
+        {% assign skip_articles = skip_articles | concat: temp %}
+        <div class="well">
+          <h3><a href="{{ related_article.url }}">{{ related_article.title }}</a></h3>
+          {% if related_article.excerpt.size > 0 %}
+            <p>{{ related_article.excerpt }}</p>
+          {% else %}
+            <p>{{ related_article.content | truncatewords: 40 }}</p>
+          {% endif %}
+        </div>
+      {% endunless %}
+    {% endif %}
+  {% endfor %}
+
+  {% endfor %}
+</div>
